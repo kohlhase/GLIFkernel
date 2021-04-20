@@ -47,7 +47,7 @@ from IPython.utils.tempdir import TemporaryDirectory
 kernel_json = {
     "argv": [sys.executable, "-m", "glif_kernel", "-f", "{connection_file}"],
     "display_name": "GLIF",
-    "language": "GLIF",
+    "language": "glif",
 }
 
 def install_my_kernel_spec(user=True, prefix=None):
@@ -55,7 +55,13 @@ def install_my_kernel_spec(user=True, prefix=None):
         os.chmod(td, 0o755) # Starts off as 700, not user readable
         with open(os.path.join(td, 'kernel.json'), 'w') as f:
             json.dump(kernel_json, f, sort_keys=True)
-        # TODO: Copy any resources
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        with open(os.path.join(td, 'kernel.js'), 'w') as f:
+            for m in ['loadAdvancedMode.js', 'loadGlifHighlighting.js', 'kernel.js']:
+                f.write(f'// BEGIN FILE: {m}\n\n')
+                with open(os.path.join(dir_path, 'js', m), 'r') as f2:
+                    f.write(f2.read())
+                f.write(f'// END FILE: {m}\n\n')
 
         print(f'Installing Jupyter kernel spec to {prefix}')
         KernelSpecManager().install_kernel_spec(td, 'GLIF', user=user, prefix=prefix)
