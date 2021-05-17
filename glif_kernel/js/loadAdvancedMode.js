@@ -150,7 +150,7 @@ function loadAdvancedMode(CodeMirror) {
         var matches = (!rule.data.sol || stream.sol()) && stream.match(rule.regex);
         if (matches) {
           rule.transitionFun(state);
-          console.log(state.stack.join(" "));
+          // console.log(state.stack.join(" "));
 
           if (rule.data.mode)
             enterLocalMode(config, state, rule.data.mode, rule.token);

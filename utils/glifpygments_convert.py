@@ -14,15 +14,23 @@ import glif.glifpygments
 # glif.glifpygments.IS_CONVERSION_MODE = True
 
 class GlifPygmentsConverter(PygmentsToCodeMirrorConverter):
+    def transform_single_token_type(self, token_type):
+        ''' see codemirror.css or theme/abcdef.css '''
+        s = PygmentsToCodeMirrorConverter.transform_single_token_type(self, token_type)
+        # TODO: Move these cases into mmtpygments
+        if s == "'Generic.Heading'":
+            return '"header"'
+        if s == "'Name'":
+            return '"variable"'
+        if s == "'Name.Builtin'":
+            return '"builtin"'
+        return s
+
     def transform_lexer_header(self, python_lexer_class):
         print(f"INFO: ignoring {python_lexer_class}.{{aliases, filenames}} for conversion since CodeMirror doesn't have such concepts")
 
         mode_name = python_lexer_class.codemirror_name
         python_lexer_source = python_lexer_class.rouge_original_source,
-        mime_type_declarations = '\n'.join(map(
-            lambda mime: self.transform_mimetype(mode_name, mime),
-            python_lexer_class.mimetypes
-            )),
 
         return f"""// remove this (?): CodeMirror, copyright (c) by Marijn Haverbeke and others
 // remove this (?): Distributed under an MIT license: https://codemirror.net/LICENSE
@@ -37,8 +45,6 @@ class GlifPygmentsConverter(PygmentsToCodeMirrorConverter):
 function loadGlifHighlighting(CodeMirror) {{
     "use strict";
 
-    {mime_type_declarations}
-
     CodeMirror.defineAdvancedMode("{mode_name}", {{
 """
 
@@ -49,6 +55,6 @@ if __name__ == '__main__':
     import os
     converter = GlifPygmentsConverter()
     with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../glif_kernel/js/loadGlifHighlighting.js'), 'w') as fp:
-        fp.write(converter.transform(glif.glifpygments.GFLexer))
+        fp.write(converter.transform(glif.glifpygments.GLIFLexer))
 
 
