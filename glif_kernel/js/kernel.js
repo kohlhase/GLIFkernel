@@ -2,8 +2,9 @@
 define([
         'base/js/namespace',
         'notebook/js/codecell',
-        'codemirror/lib/codemirror'
-], function (Jupyter, codecell, CodeMirror) {
+        'codemirror/lib/codemirror',
+        'require'
+], function (Jupyter, codecell, CodeMirror, require) {
   return {
     onload: function() {
       "use strict";
@@ -16,6 +17,13 @@ define([
           cell.auto_highlight();
         }
       });
+
+      // load glif.css
+      var element = document.createElement("link");
+      element.type = "text/css";
+      element.rel = "stylesheet";
+      element.href = require.toUrl("./glif.css");
+      document.getElementsByTagName("head")[0].appendChild(element);
     }
   }
 });

@@ -63,6 +63,10 @@ def install_my_kernel_spec(user=True, prefix=None):
                     f.write(f2.read())
                 f.write(f'// END FILE: {m}\n\n')
 
+        with open(os.path.join(td, 'glif.css'), 'w') as f:
+            with open(os.path.join(dir_path, 'css', 'glif.css'), 'r') as f2:
+                f.write(f2.read())
+
         print(f'Installing Jupyter kernel spec to {prefix}')
         KernelSpecManager().install_kernel_spec(td, 'GLIF', user=user, prefix=prefix)
 

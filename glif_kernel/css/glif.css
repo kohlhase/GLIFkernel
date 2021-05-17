@@ -1,0 +1,15 @@
+
+
+
+.glif-stderr {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.glif-stdout { }
+
+.glif-sep {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border-top-width: 2px;
+}

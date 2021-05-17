@@ -21,12 +21,29 @@ class GlifKernel(Kernel):
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=False):
         if not silent:
-            for r in self.glif.executeCell(code):
+            for i,r in enumerate(self.glif.executeCell(code)):
+#                 if r.value:
+#                     stream_content = {'name': 'stdout', 'text': f'{r.value}\n'}
+#                 else:
+#                     stream_content = {'name': 'stderr', 'text': str(r.logs)+'\n'}
+#                 self.send_response(self.iopub_socket, 'stream', stream_content)
                 if r.value:
-                    stream_content = {'name': 'stdout', 'text': f'{r.value}'}
+                    s = str(r.value).replace("\n", "<br/>")
+                    html = f'<span class="glif-stdout">{s}</span>'
                 else:
-                    stream_content = {'name': 'stderr', 'text': str(r.logs)}
-                self.send_response(self.iopub_socket, 'stream', stream_content)
+                    html = f'<span class="glif-stderr">{str(r.logs)}</span>'
+
+                if i > 0:
+                    # separator
+                    self.send_response(self.iopub_socket, 'display_data', {
+                                'data': { 'text/html': '<hr class="glif-sep"/>' },
+                                'metadata': {}, 'transient': {},
+                            })
+
+                self.send_response(self.iopub_socket, 'display_data', {
+                            'data': { 'text/html': html },
+                            'metadata': {}, 'transient': {},
+                        })
 
         return {'status': 'ok',
                 'execution_count': self.execution_count,   # incremented by base class
