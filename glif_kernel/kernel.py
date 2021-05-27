@@ -30,6 +30,7 @@ class GlifKernel(Kernel):
     def __init__(self, **kwargs):
         Kernel.__init__(self, **kwargs)
         self.glif = glif.Glif()
+        self.myexecutioncount = 0   # IPythonKernel does it's own thing and overrides the kernelbase.Kernel.execution_count
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=False):
         if not silent:
@@ -42,8 +43,9 @@ class GlifKernel(Kernel):
                 else:
                     self.html_response(f'<span class="glif-stderr">{H(r.logs)}</span>')
 
+        self.myexecutioncount += 1
         return {'status': 'ok',
-                'execution_count': self.shell.execution_count,   # IPythonKernel prefers shell's counter
+                'execution_count': self.myexecutioncount,
                 'payload': [],
                 'user_expressions': {},
                }
