@@ -3,9 +3,8 @@
 from ipykernel.ipkernel import IPythonKernel as Kernel
 from ipywidgets import widgets
 from IPython.display import display
-from glif import glif
+from glif import Glif
 from glif import utils
-from glif import parsing
 from glif.commands import Repr
 import html
 import os
@@ -29,7 +28,7 @@ class GlifKernel(Kernel):
 
     def __init__(self, **kwargs):
         Kernel.__init__(self, **kwargs)
-        self.glif = glif.Glif()
+        self.glif = Glif()
         self.myexecutioncount = 0   # IPythonKernel does it's own thing and overrides the kernelbase.Kernel.execution_count
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=False):
