@@ -29,6 +29,7 @@ class GlifKernel(Kernel):
     def __init__(self, **kwargs):
         Kernel.__init__(self, **kwargs)
         self.glif = Glif()
+        self.unicode_latex_map = None   # for tab completion, will be loaded on demand
         self.myexecutioncount = 0   # IPythonKernel does it's own thing and overrides the kernelbase.Kernel.execution_count
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=False):
@@ -106,6 +107,32 @@ class GlifKernel(Kernel):
         show_graph(labels[0])
         dropdown.observe(lambda bunch : show_graph(bunch['new']), names='value')
         display(dropdown, image)
+
+    def do_complete(self, code, cursor_pos):
+        if self.unicode_latex_map is None:
+            self.unicode_latex_map = {}
+            with open(os.path.join(os.path.dirname(__file__), 'unicode-latex-map'), 'r', encoding='utf-8') as fp:
+                for line in fp:
+                    line = line.strip()
+                    if line.startswith('//'):   # comment
+                        continue
+                    e = line.split('|')
+                    if len(e) != 2 or e[0][0] != 'j':
+                        print(f'Failed to understand the following entry in unicode-latex-map: {line}')
+                    self.unicode_latex_map[e[0][1:]] = e[1]
+
+
+        # find preceding backslash for character completion
+        c = cursor_pos - 1
+        while c >= 0 and code[c].isalnum():
+            c -= 1
+        if c >= 0 and code[c] == '\\' and code[c+1:cursor_pos] in self.unicode_latex_map:
+            return {'matches'      : [self.unicode_latex_map[code[c+1 : cursor_pos]]],
+                    'cursor_end'   : cursor_pos,
+                    'cursor_start' : c,
+                    'metadata'     : {},
+                    'status'       : 'ok'}
+
 
     def do_shutdown(self, restart):
         self.glif.do_shutdown()

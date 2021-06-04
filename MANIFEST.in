@@ -1,2 +1,3 @@
 include glif_kernel/js/*.js
 include glif_kernel/css/*.css
+include glif_kernel/unicode-latex-map
