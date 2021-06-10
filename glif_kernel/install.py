@@ -56,15 +56,15 @@ def install_my_kernel_spec(user=True, prefix=None):
         with open(os.path.join(td, 'kernel.json'), 'w') as f:
             json.dump(kernel_json, f, sort_keys=True)
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        with open(os.path.join(td, 'kernel.js'), 'w') as f:
+        with open(os.path.join(td, 'kernel.js'), 'w', encoding='utf8') as f:
             for m in ['loadAdvancedMode.js', 'loadGlifHighlighting.js', 'kernel.js']:
                 f.write(f'// BEGIN FILE: {m}\n\n')
-                with open(os.path.join(dir_path, 'js', m), 'r') as f2:
+                with open(os.path.join(dir_path, 'js', m), 'r', encoding='utf8') as f2:
                     f.write(f2.read())
                 f.write(f'// END FILE: {m}\n\n')
 
-        with open(os.path.join(td, 'glif.css'), 'w') as f:
-            with open(os.path.join(dir_path, 'css', 'glif.css'), 'r') as f2:
+        with open(os.path.join(td, 'glif.css'), 'w', encoding='utf8') as f:
+            with open(os.path.join(dir_path, 'css', 'glif.css'), 'r', encoding='utf8') as f2:
                 f.write(f2.read())
 
         print(f'Installing Jupyter kernel spec to {prefix}')
