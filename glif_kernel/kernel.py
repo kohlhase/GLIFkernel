@@ -62,11 +62,11 @@ class GlifKernel(Kernel):
         if items.items:
             curRepr = items.items[0].currentRepr
         if not all(i.currentRepr == curRepr for i in items.items):
-            self.html_response(f'<span class="glif-stderr">Internal error: Inconsistent output representations</span>')
+            self.html_response(f'<span class="glif-stderr">Internal error: Inconsistent output representations: {set([i.currentRepr for i in items.items])}</span>')
         if curRepr in {Repr.GRAPH_DOT, Repr.GRAPH_SVG}:
             self.show_graphs(items)
         else:
-            self.html_response(f'<span class="glif-stdout">{H(items)}</span>')
+            self.html_response(items.html())
 
     def show_graphs(self, items):
         assert items.items
@@ -115,6 +115,8 @@ class GlifKernel(Kernel):
                 for line in fp:
                     line = line.strip()
                     if line.startswith('//'):   # comment
+                        continue
+                    if not line:
                         continue
                     e = line.split('|')
                     if len(e) != 2 or e[0][0] != 'j':

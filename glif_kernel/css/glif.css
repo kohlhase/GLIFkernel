@@ -1,6 +1,3 @@
-
-
-
 .glif-stderr {
     color: #ff0000;
     font-weight: bold;
@@ -9,7 +6,7 @@
 .glif-stdout { }
 
 .glif-sep {
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: -2px;
+    margin-bottom: -2px;
     border-top-width: 2px;
 }
