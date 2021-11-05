@@ -13,6 +13,7 @@ USER root
 RUN wget https://github.com/GrammaticalFramework/gf-core/releases/download/3.11/gf-3.11-ubuntu-20.04.deb \
     && apt update \
     && apt install ./gf-3.11-ubuntu-20.04.deb \
+    && apt install graphviz -y \
     && apt install default-jre -y \
     && rm -rf /var/lib/apt/lists
 
