@@ -34,7 +34,7 @@ class GlifKernel(Kernel):
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=False):
         if not silent:
-            for i,r in enumerate(self.glif.executeCell(code)):
+            for i,r in enumerate(self.glif.execute_cell(code)):
                 if i > 0:
                     # separator
                     self.html_response('<hr class="glif-sep"/>')
