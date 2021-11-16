@@ -12,7 +12,7 @@ import os
 
 def html_escape(string):
     """ escapes html chars and replaces '\n' by '<br/>' """
-    return html.escape(str(string)).replace('\n', '<br/>')
+    return html.escape(str(string)).replace('\n', '<br/>').replace('  ', '&nbsp;&nbsp;')
 
 
 class GlifKernel(Kernel):
@@ -30,7 +30,7 @@ class GlifKernel(Kernel):
     def __init__(self, **kwargs):
         Kernel.__init__(self, **kwargs)
         self.glif = Glif()
-        self.unicode_latex_map = None  # for tab completion, will be loaded on demand
+        self._unicode_latex_map = None  # for tab completion, will be loaded on demand
         self.myexecutioncount = 0  # IPythonKernel does it's own thing and overrides the
         # kernelbase.Kernel.execution_count
 
@@ -113,9 +113,10 @@ class GlifKernel(Kernel):
         dropdown.observe(lambda bunch: show_graph(bunch['new']), names='value')
         display(dropdown, image)
 
-    def do_complete(self, code, cursor_pos):
-        if self.unicode_latex_map is None:
-            self.unicode_latex_map = {}
+    @property
+    def unicode_latex_map(self):
+        if self._unicode_latex_map is None:
+            self._unicode_latex_map = {}
             with open(os.path.join(os.path.dirname(__file__), 'unicode-latex-map'), 'r', encoding='utf-8') as fp:
                 for line in fp:
                     line = line.strip()
@@ -126,8 +127,11 @@ class GlifKernel(Kernel):
                     e = line.split('|')
                     if len(e) != 2 or e[0][0] != 'j':
                         print(f'Failed to understand the following entry in unicode-latex-map: {line}')
-                    self.unicode_latex_map[e[0][1:]] = e[1]
+                    self._unicode_latex_map[e[0][1:]] = e[1]
+        return self._unicode_latex_map
 
+    def do_complete(self, code, cursor_pos):
+        # 1. UNICODE COMPLETION
         # find preceding backslash for character completion
         c = cursor_pos - 1
         while c >= 0 and code[c].isalnum():
@@ -136,6 +140,24 @@ class GlifKernel(Kernel):
             return {'matches': [self.unicode_latex_map[code[c + 1: cursor_pos]]],
                     'cursor_end': cursor_pos,
                     'cursor_start': c,
+                    'metadata': {},
+                    'status': 'ok'}
+
+        # 2. VIEW/CONCRETE COMPLETION
+        c2 = None
+        if c >= 0 and code[c] == ' ':
+            if c >= 8 and code[c - 8:c] == 'concrete':
+                c2 = c - 8
+            elif c >= 4 and code[c-4:c] == 'view':
+                c2 = c - 4
+        if c2 is not None:
+            stub = self.glif.stub_gen(code[c2:cursor_pos])
+            if not stub.success:
+                print('Stub generation failed:', stub.logs)
+            assert stub.value
+            return {'matches': [stub.value],
+                    'cursor_end': cursor_pos,
+                    'cursor_start': c2,
                     'metadata': {},
                     'status': 'ok'}
 
