@@ -2,14 +2,6 @@ FROM python:3.10
 
 USER root
 
-# RUN    apt update \
-#     && apt install software-properties-common -y \
-#     && add-apt-repository ppa:deadsnakes/ppa \
-#     && apt update \
-#     && apt install python3.10-full \
-#     && rm -rf /var/lib/apt/lists
-
-
 RUN wget https://github.com/GrammaticalFramework/gf-core/releases/download/3.11/gf-3.11-ubuntu-20.04.deb \
     && apt update \
     && apt install ./gf-3.11-ubuntu-20.04.deb \
@@ -33,7 +25,12 @@ RUN apt update \
 
 ENV PATH="/home/worker/.opam/default/bin:${PATH}"
 
+# GF RGL
 USER worker
+WORKDIR /home/worker
+RUN wget https://github.com/GrammaticalFramework/gf-rgl/releases/download/20201114/gf-rgl-20201114.zip \
+    && unzip gf-rgl-20201114.zip
+ENV GF_LIB_PATH="/home/worker/gf-rgl-20201114-test"
 
 # SET UP MMT
 
