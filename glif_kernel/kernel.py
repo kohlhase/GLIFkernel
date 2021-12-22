@@ -3,7 +3,7 @@
 from ipykernel.ipkernel import IPythonKernel as Kernel
 from ipywidgets import widgets
 from IPython.display import display
-from glif import Glif
+from glif.glif import Glif
 from glif import utils
 from glif.commands.items import Repr
 import html
