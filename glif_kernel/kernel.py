@@ -3,7 +3,7 @@
 from ipykernel.ipkernel import IPythonKernel as Kernel
 from ipywidgets import widgets
 from IPython.display import display
-from glif import glif
+from glif.glif import Glif
 from glif import utils
 from glif.commands.items import Repr
 import html
@@ -29,7 +29,7 @@ class GlifKernel(Kernel):
 
     def __init__(self, **kwargs):
         Kernel.__init__(self, **kwargs)
-        self.glif = glif.Glif()
+        self.glif = Glif()
         self._unicode_latex_map = None  # for tab completion, will be loaded on demand
         self.myexecutioncount = 0  # IPythonKernel does it's own thing and overrides the
         # kernelbase.Kernel.execution_count
