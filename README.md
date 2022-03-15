@@ -49,7 +49,7 @@ Some of the reasons are:
 
 ### Actual Installation
 ```shell
-python3 -m pip install git+git://github.com/jfschaefer/glifcore.git#egg=glif
+python3 -m pip install git+https://github.com/jfschaefer/glifcore.git#egg=glif
 python3 -m pip install git+https://github.com/jfschaefer/GLIFkernel.git#egg=glif_kernel
 python3 -m glif_kernel.install
 ```
