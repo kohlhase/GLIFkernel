@@ -14,6 +14,9 @@ def html_escape(string):
     """ escapes html chars and replaces '\n' by '<br/>' """
     return html.escape(str(string)).replace('\n', '<br/>').replace('  ', '&nbsp;&nbsp;')
 
+def markdown_escape(string):
+    return string.replace('*', '\\*').replace('$', '\\$')
+
 
 class GlifKernel(Kernel):
     implementation = 'GLIF Kernel'
@@ -43,7 +46,7 @@ class GlifKernel(Kernel):
                 if r.value:
                     self.handle_items(r.value)
                 else:
-                    self.html_response(f'<span class="glif-stderr">{html_escape(r.logs)}</span>')
+                    self.html_response(f'<span class="glif-stderr">XYZ{html_escape(r.logs)}</span>')
 
         self.myexecutioncount += 1
         return {'status': 'ok',
@@ -70,7 +73,7 @@ class GlifKernel(Kernel):
         if cur_repr in {Repr.GRAPH_DOT, Repr.GRAPH_SVG}:
             self.show_graphs(items)
         else:
-            self.html_response(items.html())
+            self.html_response(markdown_escape(items.html()))
 
     def show_graphs(self, items):
         assert items.items
