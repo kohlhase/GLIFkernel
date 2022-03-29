@@ -46,7 +46,7 @@ class GlifKernel(Kernel):
                 if r.value:
                     self.handle_items(r.value)
                 else:
-                    self.html_response(f'<span class="glif-stderr">XYZ{html_escape(r.logs)}</span>')
+                    self.html_response(f'<span class="glif-stderr">{html_escape(r.logs)}</span>')
 
         self.myexecutioncount += 1
         return {'status': 'ok',
