@@ -34,7 +34,7 @@ class GlifKernel(Kernel):
         Kernel.__init__(self, **kwargs)
         self.glif = Glif()
         self._unicode_latex_map = None  # for tab completion, will be loaded on demand
-        self.myexecutioncount = 0  # IPythonKernel does it's own thing and overrides the
+        self.myexecutioncount = 0  # IPythonKernel does its own thing and overrides the
         # kernelbase.Kernel.execution_count
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=False):
