@@ -2,8 +2,11 @@ FROM python:3.10
 
 USER root
 
+RUN echo "deb http://ftp.de.debian.org/debian bullseye main\n" >> /etc/apt/sources.list
+
+RUN apt update && apt install libffi7
+
 RUN wget https://github.com/GrammaticalFramework/gf-core/releases/download/3.11/gf-3.11-ubuntu-20.04.deb \
-    && apt update \
     && apt install ./gf-3.11-ubuntu-20.04.deb \
     && apt install graphviz -y \
     && apt install default-jre -y \
@@ -39,12 +42,12 @@ RUN wget https://nc.kwarc.info/s/xneiiLxBYdMJHfq/download/mmt.jar \
     && echo "\n\n" | java -jar mmt.jar :setup \
     && rm mmt.jar \
     && java -jar MMT/systems/MMT/deploy/mmt.jar lmh install \
-    && mkdir /home/worker/MMT/MMT-content/COMMA
+    && mkdir /home/worker/MMT/content/COMMA
 ENV MMT_PATH="/home/worker/MMT/systems/MMT"
-WORKDIR /home/worker/MMT/MMT-content/COMMA
+WORKDIR /home/worker/MMT/content/COMMA
 RUN git clone https://gl.mathhub.info/COMMA/glforthel.git && git clone https://gl.mathhub.info/COMMA/GLF.git
 
-RUN python3 -m pip install git+git://github.com/jfschaefer/glifcore.git#egg=glif
+RUN python3 -m pip install git+https://github.com/jfschaefer/glifcore
 RUN python3 -m pip install git+git://github.com/jfschaefer/glifkernel.git#egg=glif-kernel
 RUN python3 -m glif_kernel.install
 
