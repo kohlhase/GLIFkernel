@@ -48,7 +48,7 @@ WORKDIR /home/worker/MMT/content/COMMA
 RUN git clone https://gl.mathhub.info/COMMA/glforthel.git && git clone https://gl.mathhub.info/COMMA/GLF.git
 
 RUN python3 -m pip install git+https://github.com/jfschaefer/glifcore
-RUN python3 -m pip install git+git://github.com/jfschaefer/glifkernel.git#egg=glif-kernel
+RUN python3 -m pip install git+https://github.com/jfschaefer/glifkernel
 RUN python3 -m glif_kernel.install
 
 WORKDIR /home/worker
