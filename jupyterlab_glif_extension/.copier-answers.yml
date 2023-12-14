@@ -1,0 +1,14 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.2.4
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: jan.frederik.schaefer@fau.de
+author_name: Jan Frederik Schaefer
+has_binder: false
+has_settings: false
+kind: frontend
+labextension_name: jupyter_glif
+project_short_description: A JupyterLab extension for GLIF (for now, just syntax highlighting)
+python_name: jupyter_glif
+repository: https://github.com/jfschaefer/jupyterlab_glif_extension
+test: false
+

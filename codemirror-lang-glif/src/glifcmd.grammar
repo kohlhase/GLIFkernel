@@ -1,0 +1,32 @@
+@top Program { command* }
+
+@skip { space | LineComment }
+
+command {
+    single_command (Pipe single_command)*
+}
+
+single_command {
+    CommandName argument* argumentVal*
+}
+
+argumentVal { String | Keywordval }
+argument { "-" ArgName ( "=" argumentVal )? }
+
+Keywordval { identifier }
+ArgName { identifier }
+
+
+CommandName { @specialize< identifier, "p" | "parse" | "l" | "linearize" > }
+
+@tokens {
+  String { '"' (!["\\] | "\\" _)* '"' }
+  LineComment { "#" ![\n]* }
+  space { $[ \t\n\r]+ }
+  Pipe {"|"}
+  identifier { $[a-zA-Z0-9_] $[a-zA-Z0-9_-]* }
+  "="
+  "-"
+}
+
+@detectDelim
