@@ -1,0 +1,49 @@
+// top-level grammar for GLIF cells in a notebook (parsers from other grammars will be nested)
+
+@top Cell {
+    GfCell | ScriptCell
+}
+
+GfCell { ( Header<"gf"> UnmatchedGfContent ) | MatchedGfContent }
+
+UnmatchedGfContent { anyToken * }
+
+MatchedGfContent { specialToken<"abstract" | "concrete" | "incomplete" | "resource" | "interface" | "instance"> }
+
+
+ScriptCell { ( Header<"script"> UnmatchedScriptContent ) | MatchedScriptContent }
+
+UnmatchedScriptContent { anyToken * }
+
+MatchedScriptContent { specialToken<"parse" | "p" | "linearize" | "l" > }
+
+
+
+Header<name> { @specialize[@name=CellType]<identifier, name> colon identifier }
+
+specialToken<tok> { @specialize<identifier, tok> }
+
+anyToken { space | identifier | colon }
+
+
+@tokens {
+  // LineComment { "--" ![\n]* }
+  space { $[ \t\n\r]+ }
+  identifier { $[a-zA-Z0-9_.-]+ }
+  colon { ":" }
+}
+
+// a copy of tokens with `@else otherToken`
+// this is needed as we want to accept arbitrary content
+// ... but it just doesn't work work because I don't understand well enough how lezer works...
+// @local tokens {
+//   // LineComment { "--" ![\n]* }
+//   space
+//   identifier
+//   colon
+//   @else otherToken
+// }
+
+
+
+

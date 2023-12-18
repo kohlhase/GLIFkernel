@@ -1,0 +1,35 @@
+// Note: the GF book has a complete BNF grammar, which should be easy to adapt (but I'm too lazy for that right now)
+
+@skip { space | LineComment }
+
+@top Grammar {
+    ( @specialize[@name=GrammarModifier]<identifier, "incomplete"> )?
+    GrammarType
+    GrammarName
+    (
+        keyword<"of">
+        identifier
+    )?
+    "="
+    ModuleBody
+}
+
+GrammarName { identifier }
+
+ModuleBody { }
+
+
+keyword<x> { @specialize[@name=KeyWord]<identifier, x> }
+
+GrammarType { @specialize<identifier, "abstract" | "resource" | "interface" | "concrete" | "instance"> }
+
+
+@tokens {
+  String { '"' (!["\\] | "\\" _)* '"' }
+  LineComment { "--" ![\n]* }
+  space { $[ \t\n\r]+ }
+  identifier { $[a-zA-Z0-9_]+ }
+  "="
+}
+
+
