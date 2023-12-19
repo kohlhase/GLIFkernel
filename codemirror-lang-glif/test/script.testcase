@@ -1,0 +1,17 @@
+# simple command
+
+parse "Hello world"
+
+==>
+
+Cell(ScriptCell(Program(CommandName, String)))
+
+
+# simple command with header
+script : hw
+
+parse "Hello world"
+
+==>
+
+Cell(ScriptCell(ScriptHeader,Program(CommandName,String)))

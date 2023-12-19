@@ -1,0 +1,7 @@
+# simple theory (without header)
+
+theory test : ur:?LF = ❚
+
+==>
+
+Cell(MmtCell(Document(Module(ModuleHeader(KeyWord,ModuleName,ModuleRef)))))
