@@ -1,49 +1,55 @@
 // top-level grammar for GLIF cells in a notebook (parsers from other grammars will be nested)
 
 @top Cell {
-    GfCell | ScriptCell
+    GfCell | ScriptCell | MmtCell | ElpiCell
 }
 
-GfCell { ( Header<"gf"> UnmatchedGfContent ) | MatchedGfContent }
+@skip { space }
 
-UnmatchedGfContent { anyToken * }
+// GF
+GfCell { ( GfHeader UnmatchedGfContent ) | MatchedGfContent }
+GfHeader { gf_intro_token colon identifier }
+UnmatchedGfContent { anyToken* eof }
+MatchedGfContent { gf_token anyToken* eof }
 
-MatchedGfContent { specialToken<"abstract" | "concrete" | "incomplete" | "resource" | "interface" | "instance"> }
+// MMT
+MmtCell { ( MmtHeader UnmatchedMmtContent ) | MatchedMmtContent }
+MmtHeader { mmt_intro_token colon identifier }
+UnmatchedMmtContent { anyToken* eof }
+MatchedMmtContent { mmt_token anyToken* eof }
 
+// ELPI
+ElpiCell { ElpiHeader UnmatchedElpiContent }
+ElpiHeader { elpi_intro_token colon identifier }
+UnmatchedElpiContent { anyToken* eof }
 
-ScriptCell { ( Header<"script"> UnmatchedScriptContent ) | MatchedScriptContent }
+// Script
+ScriptCell { MatchedScriptContent | ( ScriptHeader UnmatchedScriptContent ) }
+ScriptHeader { script_intro_token colon identifier }
+UnmatchedScriptContent { anyToken* eof }
+MatchedScriptContent { script_token anyToken* eof }
 
-UnmatchedScriptContent { anyToken * }
+gf_token { si<"abstract" | "concrete" | "incomplete" | "resource" | "interface" | "instance"> }
+mmt_token { si<"theory" | "view"> }
+script_token { si<"parse" | "p" | "linearize" | "l"> }
+gf_intro_token { si<"gf"> }
+mmt_intro_token { si<"mmt"> }
+elpi_intro_token { si<"elpi" | "elpi-notc"> }
+script_intro_token { si<"script"> }
+si<id> { @specialize<identifier, id> }
 
-MatchedScriptContent { specialToken<"parse" | "p" | "linearize" | "l" > }
-
-
-
-Header<name> { @specialize[@name=CellType]<identifier, name> colon identifier }
-
-specialToken<tok> { @specialize<identifier, tok> }
-
-anyToken { space | identifier | colon }
-
+// somehow, the specializations are not identifiers anymore in other places as well.
+// I think I lack a lot of background understanding to really get this right.
+// generic_identifier { identifier | script_token | mmt_token | gf_token | gf_intro_token | mmt_intro_token | elpi_intro_token | script_intro_token }
+anyToken { colon | symbol | identifier | script_token | gf_token | mmt_token | gf_intro_token | mmt_intro_token | elpi_intro_token | script_token }
 
 @tokens {
-  // LineComment { "--" ![\n]* }
-  space { $[ \t\n\r]+ }
-  identifier { $[a-zA-Z0-9_.-]+ }
-  colon { ":" }
+    space { $[ \t\n\r]+ }
+    colon { ":" }
+    identifier { $[a-zA-Z0-9_.-]+ }
+    symbol { ![ \t\n\r:a-zA-Z0-9_.-] }
+    eof { @eof }
 }
 
-// a copy of tokens with `@else otherToken`
-// this is needed as we want to accept arbitrary content
-// ... but it just doesn't work work because I don't understand well enough how lezer works...
-// @local tokens {
-//   // LineComment { "--" ![\n]* }
-//   space
-//   identifier
-//   colon
-//   @else otherToken
-// }
-
-
-
+@detectDelim
 

@@ -1,0 +1,39 @@
+@skip { space | LineComment }
+
+@top Program { Rule* }
+
+
+Rule { typing_rule | module_rule | normal_rule }
+
+typing_rule { TypingPred HeadHead stuff Period }
+module_rule { ModulePred HeadHead Period }
+
+normal_rule { HeadHead stuff Period }
+
+
+// the main identifier being declared/defined
+HeadHead { other_token }
+
+ModName { other_token }
+
+stuff { ( ElpiKeyword | other_token | Variable | Discard_variable | String | Int | Operator )* }
+
+
+@external specialize {constant} specialize_elpi_ident from "./elpitokens" {
+  TypingPred,
+  ModulePred,
+  ElpiKeyword,
+  other_token
+}
+
+@tokens {
+  String { '"' (!["\\] | "\\" _)* '"' }
+  Int { $[0-9]+ }
+  LineComment { "%" ![\n]* }
+  space { $[ \t\n\r]+ }
+  constant { $[a-z] $[a-zA-Z0-9_]* }
+  Variable { $[A-Z] $[a-zA-Z0-9_]* }
+  Discard_variable { "_" $[A-Z] $[a-zA-Z0-9_]* }
+  Operator { "\\" | "=" | "->" }
+  Period { "." }
+}

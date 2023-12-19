@@ -32,4 +32,5 @@ GrammarType { @specialize<identifier, "abstract" | "resource" | "interface" | "c
   "="
 }
 
+@detectDelim
 

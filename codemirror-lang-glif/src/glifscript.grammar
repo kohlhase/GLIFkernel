@@ -1,20 +1,20 @@
-@top Program { command* }
+@top Program { Command* }
 
 @skip { space | LineComment }
 
-command {
-    single_command (Pipe single_command)*
+Command {
+    Single_command (Pipe Single_command)*
 }
 
-single_command {
+Single_command {
     CommandName argument* argumentVal*
 }
 
 argumentVal { String | Keywordval }
-argument { "-" ArgName ( "=" argumentVal )? }
+argument { ArgName ( "=" argumentVal )? }
 
 Keywordval { identifier }
-ArgName { identifier }
+ArgName { "-" identifier }
 
 
 CommandName { @specialize< identifier, "p" | "parse" | "l" | "linearize" > }

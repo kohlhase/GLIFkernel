@@ -1,0 +1,72 @@
+@skip { space }
+
+@top Document { (ModuleComment | Module | DirectiveStmt )* }
+
+
+// MODULE LEVEL
+
+ModuleComment {
+    operator<"//"|"/T">
+    identifier*
+    MD
+}
+
+Module {
+    ModuleHeader
+    (Declaration|DeclarationComment)*
+    MD
+}
+
+ModuleHeader {
+    ( keyword<"theory"> ModuleName (operator<":"> ModuleRef)? operator<"="> ) |
+    ( keyword<"view"> ModuleName operator<":"> ModuleRef operator<"->"> ModuleRef operator<"=">)
+}
+
+ModuleName { identifier }   // module name when module is introduced
+
+
+DirectiveStmt {
+    keyword<"namespace" | "fixmeta">
+    ModuleRef
+    MD
+}
+
+
+
+// DECLARATION LEVEL
+
+DeclarationComment { operator<"//"|"/T"> identifier* DD }
+Declaration { StandardDeclaration | IncludeDeclaration }
+StandardDeclaration { NewIdentifier (Object (OD Object)+)? DD }
+IncludeDeclaration { keyword<"include"> ModuleRef DD }
+NewIdentifier { identifier }
+
+
+// OBJECT LEVEL
+
+Object { TypeObject | DefiniensObject | NotationObject | RoleObject }
+TypeObject { operator<":"> identifier+ }
+DefiniensObject { operator<"="> identifier+ }
+NotationObject { operator<"#"> identifier+ }
+RoleObject { keyword<"role"> identifier+ }
+
+
+// OTHER
+
+ModuleRef { identifier }
+
+
+
+keyword<x> { @specialize[@name=KeyWord]<identifier, x> }
+operator<x> { @specialize<identifier, x> }
+
+@tokens {
+  space { $[ \t\n\r]+ }
+  OD { "❘" }
+  DD { "❙" }
+  MD { "❚" }
+  identifier { ![ \t\n\r❘❙❚]+ }
+}
+
+@detectDelim
+
