@@ -13,7 +13,6 @@ setup(
         'ipykernel',
         'ipython',
         'ipywidgets',
-        'jupyter',
         'jupyter-client'   # TODO: glifcore
     ],
     classifiers=[       # https://pypi.org/pypi?%3Aaction=list_classifiers

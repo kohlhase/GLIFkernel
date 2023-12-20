@@ -37,7 +37,7 @@ DirectiveStmt {
 
 DeclarationComment { operator<"//"|"/T"> identifier* DD }
 Declaration { StandardDeclaration | IncludeDeclaration }
-StandardDeclaration { NewIdentifier (Object (OD Object)+)? DD }
+StandardDeclaration { NewIdentifier (Object (OD Object)*)? DD }
 IncludeDeclaration { keyword<"include"> ModuleRef DD }
 NewIdentifier { identifier }
 

@@ -1,6 +1,7 @@
 // Note: the GF book has a complete BNF grammar, which should be easy to adapt (but I'm too lazy for that right now)
 
-@skip { space | LineComment }
+@skip { space | LineComment | BlockComment | Pragma }
+
 
 @top Grammar {
     ( @specialize[@name=GrammarModifier]<identifier, "incomplete"> )?
@@ -11,14 +12,98 @@
         identifier
     )?
     "="
-    ModuleBody
+    PreModBody
+    MainModBody?
 }
 
 GrammarName { identifier }
 
-ModuleBody { }
+PreModBody {
+    (id_list_nonempty "**")? |
+    (identifier "-"? ("[" id_list_nonempty "]")? keyword<"with"> (open ("," open)*)? "**"?)? |
+    (keyword<"open"> (open ("," open)*)? keyword<"in">)
+}
+open { identifier | ( "(" identifier ")" ) | ( "(" identifier "=" identifier ")" ) }
+
+MainModBody { "{" Section* "}" }
 
 
+Section {
+    keyword<"cat" | "lin" | "def" | "lindef" | "oper" | "fun" | "data" | "flags" | "param" | "lincat">
+    ( Decl ";" )+
+}
+
+
+Literal { 
+    String |
+    Integer
+    // todo: Double
+}
+
+AtomicExpr {
+    Literal |
+    identifier |
+    @specialize[@name=Sort]<identifier, "Type" | "Ptype" | "Str" | "Strs"> |
+    "?"
+    // ("?" Integer?)
+}
+
+// a : x = y (type/definiendum option)
+// note: identifier* is for lin - should we extract this to separate rule for lin/oper?
+Decl { (id_list_nonempty identifier* (":" Expr)? ("=" Expr)?) }
+
+DeclsIn { Decl (";" Decl)* }
+
+// helpful to separate for indentation
+ParenExpr { ("(" Expr (":" Expr)? ")") }
+RecordExpr { ("{" DeclsIn "}") }
+TupleExpr { ("<" Expr ("," Expr)* (":" Expr)? ">") }
+BracketedExpr { ParenExpr | RecordExpr | TupleExpr }
+
+
+// separating these out is helpful for indentation and potentially folding
+CaseBody { "{" (Pattern "=>" Expr) (";" Pattern "=>" Expr)* "}" }
+VariantsBody { "{" (Expr (";" Expr)*)? "}" }
+
+// not sure if this is correct, but for syntax highlighting it shouldn't really matter anyway
+@precedence { project @left, apply @left, at @left, bang @left, extend @left, mul @left, plus @left, tokconc @left, var @left, doublearr @right, singlearr @right }
+
+Expr {
+    AtomicExpr
+    | BracketedExpr
+    | (keyword<"table"> CaseBody)
+    | (keyword<"variants"> VariantsBody)
+    | (keyword<"case"> Expr keyword<"of"> CaseBody)
+    | (keyword<"lin"> identifier Expr)
+    | (keyword<"pre"> CaseBody)
+    | (Expr (
+                ((!tokconc "++" | !plus "+" | !bang "!" | !mul "*" | !extend "**" | !singlearr "->" | !doublearr "=>" | !var "|" | !apply () ) Expr) |
+                (!project "." (identifier | ("$" Integer)))
+            )
+      )
+    | ("\\" "\\"? ((identifier | Underscore) ("," (identifier | Underscore))*)? (!singlearr "->" | !doublearr "=>") Expr)
+    | (keyword<"let"> (("{" DeclsIn? "}") | DeclsIn) keyword<"in"> Expr)
+}
+
+AtomicPattern {
+    Literal | identifier | Underscore | "?"
+}
+
+BracketedPattern {
+    ("(" Pattern ")")
+}
+
+Pattern {
+    AtomicPattern | BracketedPattern |
+        (
+            Pattern (!at "@" | !plus "+" | !var "|") Pattern
+        )
+}
+
+id_list_nonempty { identifier ("," identifier)* }
+
+
+Underscore { @specialize<identifier, "_"> }
 keyword<x> { @specialize[@name=KeyWord]<identifier, x> }
 
 GrammarType { @specialize<identifier, "abstract" | "resource" | "interface" | "concrete" | "instance"> }
@@ -26,10 +111,39 @@ GrammarType { @specialize<identifier, "abstract" | "resource" | "interface" | "c
 
 @tokens {
   String { '"' (!["\\] | "\\" _)* '"' }
+  BlockComment { '{-' (![-] | "-" _)* '-}' }
   LineComment { "--" ![\n]* }
+  Pragma { "--#" ![\n]* }
   space { $[ \t\n\r]+ }
-  identifier { $[a-zA-Z0-9_]+ }
+  identifier { $[a-zA-Z_] $[a-zA-Z0-9_]* }
+  Integer { $[0-9]+ }
   "="
+  "**"
+  "*"
+  "++"
+  "+"
+  ","
+  "("
+  "."
+  ")"
+  "-"
+  "["
+  "]"
+  "{"
+  "}"
+  "$"
+  ":"
+  "?"
+  "=>"
+  "->"
+  "\\"
+  "|"
+  @precedence { Pragma, LineComment, "-" }
+  @precedence { BlockComment, "{" }
+  @precedence { "=>", "=" }
+  @precedence { "->", "-" }
+  @precedence { "++", "+" }
+  @precedence { "**", "*" }
 }
 
 @detectDelim

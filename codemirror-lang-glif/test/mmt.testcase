@@ -4,4 +4,32 @@ theory test : ur:?LF = ❚
 
 ==>
 
-Cell(MmtCell(Document(Module(ModuleHeader(KeyWord,ModuleName,ModuleRef)))))
+Cell(MmtCell(Document(Module(ModuleHeader(KeyWord,ModuleName,ModuleRef),MD))))
+
+# proplog theory
+
+theory proplog : ur:?LF =
+    prop : type ❘ # o ❙     // type of propositions with notation o ❙
+    negation : o ⟶ o ❘ # ¬ 1 prec 100 ❙    // ⟶ can be entered with \raa ❙
+    conjunction : o ⟶ o ⟶ o ❘ # 1 ∧ 2 prec 90 ❙
+    disjunction : o ⟶ o ⟶ o ❘ # 1 ∨ 2 prec 80 
+       ❘ = [p,q] negation (conjunction (negation p) (negation q)) ❙
+    implication : o ⟶ o ⟶ o ❘ # 1 ⇒ 2 prec 70 ❙
+❚
+
+==>
+
+Cell(MmtCell(Document(Module(ModuleHeader(KeyWord,ModuleName,ModuleRef),Declaration(StandardDeclaration(NewIdentifier,Object(TypeObject),OD,Object(NotationObject),DD)),DeclarationComment(DD),Declaration(StandardDeclaration(NewIdentifier,Object(TypeObject),OD,Object(NotationObject),DD)),DeclarationComment(DD),Declaration(StandardDeclaration(NewIdentifier,Object(TypeObject),OD,Object(NotationObject),DD)),Declaration(StandardDeclaration(NewIdentifier,Object(TypeObject),OD,Object(NotationObject),OD,Object(DefiniensObject),DD)),Declaration(StandardDeclaration(NewIdentifier,Object(TypeObject),OD,Object(NotationObject),DD)),MD))))
+
+
+# view
+
+view Frag4GrammarSemantics : http://mathhub.info/tmpGLIF/default/Frag4Grammar.gf?Frag4Grammar -> ?situation =
+    S = o ❙
+    NP = (ι ⟶ o) ⟶ o ❙
+❚
+
+==> 
+
+Cell(MmtCell(Document(Module(ModuleHeader(KeyWord,ModuleName,ModuleRef,ModuleRef),Declaration(StandardDeclaration(NewIdentifier,Object(DefiniensObject),DD)),Declaration(StandardDeclaration(NewIdentifier,Object(DefiniensObject),DD)),MD))))
+

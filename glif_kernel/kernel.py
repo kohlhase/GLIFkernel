@@ -27,6 +27,11 @@ class GlifKernel(Kernel):
         'name': 'GLIF',
         'mimetype': 'text/glif',
         'file_extension': '.glif',  # ???
+        "codemirror_mode": {
+            "name": "glif",
+            # "name": "ipython",
+            # "version": 3
+        },
     }
     banner = "GLIF"
 

@@ -1,0 +1,28 @@
+# simple abstract syntax
+
+abstract Test of X = TT ** {
+    cat
+        Fn;
+}
+
+==>
+
+Cell(GfCell(Grammar(GrammarType,GrammarName,KeyWord,"=",PreModBody("**"),MainModBody("{",Section(KeyWord,Decl),"}"))))
+
+
+
+# a concrete syntax
+
+concrete TestEng of Test = {
+    param
+        Number = Sg | Pl;
+    lincat
+        NP = {s : Str; n : Number};
+    fun
+        mkS np vp = np.s ++ vp.s ! np.n;
+}
+
+==>
+
+Cell(GfCell(Grammar(GrammarType,GrammarName,KeyWord,"=",PreModBody,MainModBody("{",Section(KeyWord,Decl("=",Expr(Expr(AtomicExpr),"|",Expr(AtomicExpr)))),Section(KeyWord,Decl("=",Expr(BracketedExpr(RecordExpr("{",DeclsIn(Decl(":",Expr(AtomicExpr(Sort))),Decl(":",Expr(AtomicExpr))),"}"))))),Section(KeyWord,Decl("=",Expr(Expr(Expr(AtomicExpr),"."),"++",Expr(Expr(Expr(AtomicExpr),"."),Expr(Expr(AtomicExpr),"."))))),"}"))))
+

@@ -4,7 +4,7 @@ parse "Hello world"
 
 ==>
 
-Cell(ScriptCell(Program(CommandName, String)))
+Cell(ScriptCell(Program(Command(Single_command(CommandName,String)))))
 
 
 # simple command with header
@@ -14,4 +14,5 @@ parse "Hello world"
 
 ==>
 
-Cell(ScriptCell(ScriptHeader,Program(CommandName,String)))
+
+Cell(ScriptCell(ScriptHeader,Program(Command(Single_command(CommandName,String)))))

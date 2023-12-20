@@ -51,8 +51,13 @@ RUN python3 -m pip install git+https://github.com/jfschaefer/glifcore
 RUN python3 -m pip install git+https://github.com/jfschaefer/glifkernel
 RUN python3 -m glif_kernel.install
 
+
 WORKDIR /home/worker
 RUN git clone --depth=1 https://github.com/jfschaefer/glifkernel
+WORKDIR /home/worker/glifkernel
+USER root
+RUN apt update && apt install -y npm && cd codemirror-lang-glif && npm install --save && cd ../jupyterlab_glif_extension && python3 -m pip install -e . && jupyter labextension develop --overwrite . && npm cache clean && apt remove npm && rm -rf /var/lib/apt/lists
+USER worker
 WORKDIR /home/worker/glifkernel/notebooks
 
 

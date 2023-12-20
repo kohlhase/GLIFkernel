@@ -45,6 +45,15 @@ export function GLIFScript() {
 export const GFLanguage = LRLanguage.define({
     parser: gfParser.configure({
         props: [
+            indentNodeProp.add({
+                Section: continuedIndent(),   // todo: while typing, it always assumes we are done with the section and de-dents
+                MainModBody: delimitedIndent({closing: "}"}),
+                BlockComment: delimitedIndent({closing: "-}"}),
+                BracketedPattern: delimitedIndent({closing: ")"}),
+                ParenExpr: delimitedIndent({closing: ")"}),
+                RecordExpr: delimitedIndent({closing: "}"}),
+                TupleExpr: delimitedIndent({closing: ">"}),
+            }),
             styleTags({
                 String: t.string,
                 LineComment: t.lineComment,
@@ -52,6 +61,8 @@ export const GFLanguage = LRLanguage.define({
                 GrammarModifier: t.keyword,
                 GrammarType: t.keyword,
                 GrammarName: t.className,
+                Pragma: t.special(t.lineComment),
+                BlockComment: t.blockComment,
             })
         ]
     }),
@@ -73,9 +84,9 @@ export const MMTLanguage = LRLanguage.define({
             indentNodeProp.add({
                 Module: delimitedIndent({closing: "❚"}),
                 Declaration: delimitedIndent({closing: "❙"}),
-                Object: continuedIndent(),
-                DeclarationComment: delimitedIndent({closing: "❙", units: 3}),
-                ModuleComment: delimitedIndent({closing: "❚", units: 3}),
+                Object: delimitedIndent({closing: "❘"}),
+                DeclarationComment: delimitedIndent({closing: "❙"}),
+                ModuleComment: delimitedIndent({closing: "❚"}),
             }),
             styleTags({
                 KeyWord: t.keyword,

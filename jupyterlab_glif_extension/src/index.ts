@@ -9,7 +9,7 @@ import {
 
 
 // import { sql } from '@codemirror/lang-sql';
-import {GLIF} from 'codemirror-lang-glif';
+import {GLIFCell} from 'codemirror-lang-glif';
 
 
 /**
@@ -26,7 +26,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             name: 'glif',
             mime: 'text/glif',
             // support: sql()
-            support: GLIF()
+            support: GLIFCell()
         });
     console.log('JupyterLab extension jupyter_glif is activated DONE!');
   }

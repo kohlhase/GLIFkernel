@@ -17,7 +17,7 @@ Keywordval { identifier }
 ArgName { "-" identifier }
 
 
-CommandName { @specialize< identifier, "p" | "parse" | "l" | "linearize" > }
+CommandName { @specialize< identifier, "import" | "i" | "archive" | "a" | "status" | "s" | "construct" | "c" | "populate" | "elpigen" | "eg" | "filter" | "help" | "h" | "query" | "apply" | "parse" | "p" | "put_string" | "ps" | "put_tree" | "pt" | "linearize" | "l" | "visualize_tree" | "vt" | "visualize_parse" | "vp" | "generate_random" | "gr" | "generate_trees" | "gt" > }
 
 @tokens {
   String { '"' (!["\\] | "\\" _)* '"' }
