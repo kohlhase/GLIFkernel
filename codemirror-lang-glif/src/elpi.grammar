@@ -1,4 +1,4 @@
-@skip { space | LineComment }
+@skip { space | LineComment | BlockComment }
 
 @top Program { Rule* }
 
@@ -14,8 +14,6 @@ normal_rule { HeadHead stuff Period }
 // the main identifier being declared/defined
 HeadHead { other_token }
 
-ModName { other_token }
-
 stuff { ( ElpiKeyword | other_token | Variable | Discard_variable | String | Int | Operator )* }
 
 
@@ -30,6 +28,7 @@ stuff { ( ElpiKeyword | other_token | Variable | Discard_variable | String | Int
   String { '"' (!["\\] | "\\" _)* '"' }
   Int { $[0-9]+ }
   LineComment { "%" ![\n]* }
+  BlockComment { "/*" (![*] | ("*" ![/]))* "*/" }
   space { $[ \t\n\r]+ }
   constant { $[a-z] $[a-zA-Z0-9_]* }
   Variable { $[A-Z] $[a-zA-Z0-9_]* }

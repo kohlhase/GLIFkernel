@@ -21,12 +21,14 @@ CommandName { @specialize< identifier, "import" | "i" | "archive" | "a" | "statu
 
 @tokens {
   String { '"' (!["\\] | "\\" _)* '"' }
-  LineComment { "#" ![\n]* }
+  LineComment { ("#" | "--" | "%") ![\n]* }
   space { $[ \t\n\r]+ }
   Pipe {"|"}
   identifier { $[a-zA-Z0-9_] $[a-zA-Z0-9_-]* }
   "="
   "-"
+
+  @precedence { LineComment, "-" }
 }
 
 @detectDelim

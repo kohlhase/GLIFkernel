@@ -4,7 +4,7 @@
     GfCell | ScriptCell | MmtCell | ElpiCell
 }
 
-@skip { space }
+@skip { space | LineComment | BlockComment }
 
 // GF
 GfCell { ( GfHeader UnmatchedGfContent ) | MatchedGfContent }
@@ -31,12 +31,14 @@ MatchedScriptContent { script_token anyToken* eof }
 
 gf_token { si<"abstract" | "concrete" | "incomplete" | "resource" | "interface" | "instance"> }
 mmt_token { si<"theory" | "view"> }
-script_token { si<"parse" | "p" | "linearize" | "l"> }
+script_token { si<"apply" | "archive" | "a" | "construct" | "c" | "elpigen" | "eg" | "filter" | "generate_random" | "gr" | "generate_trees" | "gt" | "help" | "h" | "import" | "i" | "linearize" | "l" | "parse" | "p" | "populate" | "put_string" | "ps" | "put_tree" | "pt" | "query" | "status" | "s" | "visualize_parse" | "vp" | "visualize_tree" | "vt">
+}
 gf_intro_token { si<"gf"> }
 mmt_intro_token { si<"mmt"> }
 elpi_intro_token { si<"elpi" | "elpi-notc"> }
 script_intro_token { si<"script"> }
 si<id> { @specialize<identifier, id> }
+
 
 // somehow, the specializations are not identifiers anymore in other places as well.
 // I think I lack a lot of background understanding to really get this right.
@@ -45,10 +47,15 @@ anyToken { colon | symbol | identifier | script_token | gf_token | mmt_token | g
 
 @tokens {
     space { $[ \t\n\r]+ }
+    LineComment { ("--" | "%" | "#") ![\n]* }
+    BlockComment { ("/*" (![*] | ("*" ![/]))* "*/") | ("//" ![❘❙❚] $[❘❙❚]) }
     colon { ":" }
     identifier { $[a-zA-Z0-9_.-]+ }
     symbol { ![ \t\n\r:a-zA-Z0-9_.-] }
     eof { @eof }
+    @precedence { LineComment, symbol }
+    @precedence { LineComment, identifier }
+    @precedence { BlockComment, symbol }
 }
 
 @detectDelim

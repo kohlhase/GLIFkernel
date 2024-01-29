@@ -1,4 +1,12 @@
 import { LRLanguage, LanguageSupport } from "@codemirror/language";
-declare const GLIFlanguage: LRLanguage;
-declare function GLIF(): LanguageSupport;
-export { GLIFlanguage, GLIF };
+declare const GLIFScriptLanguage: LRLanguage;
+declare function GLIFScript(): LanguageSupport;
+declare const GFLanguage: LRLanguage;
+declare function GF(): LanguageSupport;
+declare const MMTLanguage: LRLanguage;
+declare function MMT(): LanguageSupport;
+declare const ELPILanguage: LRLanguage;
+declare function ELPI(): LanguageSupport;
+declare const GLIFCellLanguage: LRLanguage;
+declare function GLIFCell(): LanguageSupport;
+export { GLIFScriptLanguage, GLIFScript, GFLanguage, GF, MMTLanguage, MMT, ELPILanguage, ELPI, GLIFCellLanguage, GLIFCell };

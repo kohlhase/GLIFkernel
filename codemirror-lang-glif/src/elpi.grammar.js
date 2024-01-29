@@ -3,16 +3,16 @@ import {LRParser} from "@lezer/lr"
 import {specialize_elpi_ident} from "./elpitokens"
 export const parser = LRParser.deserialize({
   version: 14,
-  states: "#fQYQPOOOOQO'#Cc'#CcO`QPO'#CpO`QPO'#CrOeQPO'#CsOOQO'#Cb'#CbOOQO'#Cj'#CjQYQPOOOeQPO,59[O!PQPO,59^OOQO'#Ck'#CkO!UQPO'#CqO!pQPO,59_OOQO-E6h-E6hO!uQPO1G.vOOQO1G.x1G.xOOQO-E6i-E6iOOQO1G.y1G.yOOQO7+$b7+$b",
-  stateData: "!z~OcOSSOS~OPQOQROaPO~ORYOWYOXYOYYOZYO[YOaYO]eP~O]_O~ORYOWYOXYOYYOZYO[YOaYO]eX~O]aO~O]bO~O",
-  goto: "!`hPPPPPPimPPPPPPw}PPPP!U!Y!U!UTUOVSSOVQWQRXRQVOR]VSZSWR`ZTTOVQ[SR^W",
-  nodeNames: "⚠ TypingPred ModulePred ElpiKeyword LineComment Program Rule HeadHead Variable Discard_variable String Int Operator Period",
-  maxTerm: 24,
-  skippedNodes: [0,4],
+  states: "#fQ]QPOOOOQO'#Cd'#CdOcQPO'#CqOcQPO'#CsOhQPO'#CtOOQO'#Cc'#CcOOQO'#Ck'#CkQ]QPOOOhQPO,59]O!SQPO,59_OOQO'#Cl'#ClO!XQPO'#CrO!sQPO,59`OOQO-E6i-E6iO!xQPO1G.wOOQO1G.y1G.yOOQO-E6j-E6jOOQO1G.z1G.zOOQO7+$c7+$c",
+  stateData: "!}~OdOSSOSTOS~OPQOQRObPO~ORYOXYOYYOZYO[YO]YObYO^fP~O^_O~ORYOXYOYYOZYO[YO]YObYO^fX~O^aO~O^bO~O",
+  goto: "!aiPPPPPPPjnPPPPPPx!OPPPP!V!Z!V!VTUOVSSOVQWQRXRQVOR]VSZSWR`ZTTOVQ[SR^W",
+  nodeNames: "⚠ TypingPred ModulePred ElpiKeyword LineComment BlockComment Program Rule HeadHead Variable Discard_variable String Int Operator Period",
+  maxTerm: 25,
+  skippedNodes: [0,4,5],
   repeatNodeCount: 2,
-  tokenData: "&Y~R^XY}YZ}]^}pq}rs!`uv#|}!O$e!O!P$p!Q![$u!_!`$k!c!}$}#O#P$k#R#S%`#T#o%w~!SSc~XY}YZ}]^}pq}~!cVOr!`rs!xs#O!`#O#P!}#P;'S!`;'S;=`#v<%lO!`~!}OY~~#QRO;'S!`;'S;=`#Z;=`O!`~#^WOr!`rs!xs#O!`#O#P!}#P;'S!`;'S;=`#v;=`<%l!`<%lO!`~#yP;=`<%l!`~$RSS~OY#|Z;'S#|;'S;=`$_<%lO#|~$bP;=`<%l#|~$hP!`!a$k~$pO[~~$uO]~~$zPZ~!Q![$u~%SSW~!Q![$}!c!}$}#R#S$}#T#o$}~%cP!c!}%f~%kSX~!Q![%f!c!}%f#R#S%f#T#o%f~%|Sh~!Q![%w!c!}%w#R#S%w#T#o%w",
+  tokenData: "'d~R_XY!QYZ!Q]^!Qpq!Qrs!cuv$P}!O$h!O!P$s!P!Q$x!Q![&P!_!`$n!c!}&X#O#P$n#R#S&j#T#o'R~!VSd~XY!QYZ!Q]^!Qpq!Q~!fVOr!crs!{s#O!c#O#P#Q#P;'S!c;'S;=`#y<%lO!c~#QOZ~~#TRO;'S!c;'S;=`#^;=`O!c~#aWOr!crs!{s#O!c#O#P#Q#P;'S!c;'S;=`#y;=`<%l!c<%lO!c~#|P;=`<%l!c~$USS~OY$PZ;'S$P;'S;=`$b<%lO$P~$eP;=`<%l$P~$kP!`!a$n~$sO]~~$xO^~~${Pz{%O~%RTOz%Oz{%b{;'S%O;'S;=`%y<%lO%O~%eTO!P%O!P!Q%t!Q;'S%O;'S;=`%y<%lO%O~%yOT~~%|P;=`<%l%O~&UP[~!Q![&P~&^SX~!Q![&X!c!}&X#R#S&X#T#o&X~&mP!c!}&p~&uSY~!Q![&p!c!}&p#R#S&p#T#o&p~'WSi~!Q!['R!c!}'R#R#S'R#T#o'R",
   tokenizers: [0],
-  topRules: {"Program":[0,5]},
-  specialized: [{term: 24, get: (value, stack) => (specialize_elpi_ident(value, stack) << 1), external: specialize_elpi_ident}],
+  topRules: {"Program":[0,6]},
+  specialized: [{term: 25, get: (value, stack) => (specialize_elpi_ident(value, stack) << 1), external: specialize_elpi_ident}],
   tokenPrec: 0
 })

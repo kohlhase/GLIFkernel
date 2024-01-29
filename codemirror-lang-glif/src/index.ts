@@ -26,7 +26,7 @@ export const GLIFScriptLanguage = LRLanguage.define({
                 LineComment: t.lineComment,
                 // Pipe: t.controlOperator,
                 ArgName: t.propertyName,
-                Keywordval: t.labelName,
+                // Keywordval: t.labelName,
             })
         ]
     }),
@@ -115,10 +115,11 @@ export const ELPILanguage = LRLanguage.define({
     parser: elpiParser.configure({
         props: [
             indentNodeProp.add({
-                Rule: delimitedIndent({closing: "."}),
+                Rule: delimitedIndent({closing: ".", align: false}),
             }),
             styleTags({
                 LineComment: t.lineComment,
+                BlockComment: t.blockComment,
                 String: t.string,
                 Int: t.integer,
                 TypingPred: t.keyword,
@@ -154,23 +155,25 @@ export const GLIFCellLanguage = LRLanguage.define({
                 MmtHeader: t.documentMeta,
                 ScriptHeader: t.documentMeta,
                 GfHeader: t.documentMeta,
+                LineComment: t.lineComment,
+                BlockComment: t.blockComment,
             })
         ],
         wrap: parseMixed(node => {
             if (node.name == "MatchedGfContent" || node.name == "UnmatchedGfContent") {
-                console.log("GF CONTENT");
+                // console.log("GF CONTENT");
                 return {parser: GFLanguage.parser};
             }
             if (node.name == "MatchedMmtContent" || node.name == "UnmatchedMmtContent") {
-                console.log("MMT CONTENT");
+                // console.log("MMT CONTENT");
                 return {parser: MMTLanguage.parser};
             }
             if (node.name == "MatchedElpiContent" || node.name == "UnmatchedElpiContent") {
-                console.log("ELPI CONTENT");
+                // console.log("ELPI CONTENT");
                 return {parser: ELPILanguage.parser};
             }
             if (node.name == "MatchedScriptContent" || node.name == "UnmatchedScriptContent") {
-                console.log("SCRIPT CONTENT");
+                // console.log("SCRIPT CONTENT");
                 return {parser: GLIFScriptLanguage.parser};
             }
             return null;
